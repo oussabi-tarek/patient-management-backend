@@ -16,7 +16,7 @@ const RdvSchema=mongoose.Schema({
     },
     etat:{
         type:String,
-        required:true
+        required:true,
     },
     documents:[
         {
