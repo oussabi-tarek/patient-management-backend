@@ -36,8 +36,11 @@ const MedecinSchema = mongoose.Schema({
     service:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Service',
+    },
+    assisstant:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Assisstant',
     }
-    
 });
 
 const Medecin=mongoose.model('Medecin',MedecinSchema,'medecin');
