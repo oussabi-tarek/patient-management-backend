@@ -1,10 +1,6 @@
 const  mongoose = require('mongoose');
 
 const  FactureSchema = mongoose.Schema({
-    id:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true
-    },
     date:{
         type:Date,
         required:true
@@ -13,9 +9,9 @@ const  FactureSchema = mongoose.Schema({
         type:Number,
         required:true
     },
-    rdv:{
+    consultation:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Rdv',
+        ref:'Consultation',
     },
 });
     

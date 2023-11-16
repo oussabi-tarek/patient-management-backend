@@ -2,10 +2,6 @@ const sequelize=require('../model/db')
 const mongoose=require('mongoose')
 
 const RdvSchema=mongoose.Schema({
-    id:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true
-    },
     date:{
         type:Date,
         required:true
@@ -16,7 +12,13 @@ const RdvSchema=mongoose.Schema({
     },
     etat:{
         type:String,
-        required:true
+        required:true,
+        enum:['annulé','réel']
+    },
+    type:{
+        type:String,
+        required:true,
+        enum:["en ligne","sur place"]
     },
     documents:[
         {
@@ -36,7 +38,6 @@ const RdvSchema=mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'Consultation',
     },
-     
 });
 
 const Rdv=mongoose.model('Rdv',RdvSchema);

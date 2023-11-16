@@ -1,33 +1,38 @@
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
 
-const ConsultationSchema=mongoose.Schema({
-    date:{
-        type:Date,
-        required:true
+const ConsultationSchema = mongoose.Schema({
+    date: {
+        type: Date,
+        required: true
     },
-    description:{
-        type:String,
-        required:true
+    description: {
+        type: String,
+        required: true
     },
-    ordonnance:{
-        type:Buffer,
-        required:false
+    etat: {
+        type: String,
+        required: true,
+        enum: ['close', 'contrôle']
     },
-    analyse:{
-        type:Buffer,
-        required:false
+    ordonnance: {
+        type: Buffer,
+        required: false
     },
-    scanner:{
-        type:Buffer,
-        required:false
-    },
-    radio:{
-        type:Buffer,
-        required:false
-    },
+    analyses: [
+        {
+            type: Buffer,
+            required: false
+        }
+    ],
+    scanner: [
+        {
+            type: Buffer,
+            required: false
+        }
+    ],
 
-    });
+});
 
-const Consultation=mongoose.model('Consultation',ConsultationSchema,'consultation');
+const Consultation = mongoose.model('Consultation', ConsultationSchema, 'consultation');
 
-module.exports=Consultation;
+module.exports = Consultation;
