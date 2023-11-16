@@ -1,16 +1,16 @@
-const mongoose=require('mongoose');
+const mongoose = require("mongoose");
 
-const ServiceSchema=mongoose.Schema({
-  libelle:{
-    type:String,
-    required:true
+const ServiceSchema = mongoose.Schema({
+  libelle: {
+    type: String,
+    required: true,
   },
-    description:{
-        type:String,
-        required:true
-    },
+  description: {
+    type: String,
+    required: true,
+  },
 });
 
-const Service=mongoose.model('Service',ServiceSchema,'service');
+const Service = mongoose.model("Service", ServiceSchema, "service");
 
-module.exports=Service;
+module.exports = Service;
