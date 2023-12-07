@@ -38,10 +38,12 @@ const  PatientSchema=mongoose.Schema({
         type:String,
         required:true
     },
-    medecin:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Medecin'
-    },
+    medecins:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Medecin'
+        }
+    ],
 });
 
 // Méthode pour comparer les mots de passe hachés
