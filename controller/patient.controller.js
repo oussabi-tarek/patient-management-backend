@@ -2,12 +2,7 @@ const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const Patient = require('../model/Patient');
-
-const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
-  });
-};
+const generateToken = require('../middleware/generateToken.middleware');
 
 const registerPatient = asyncHandler(async (req, res) => {
   let {
