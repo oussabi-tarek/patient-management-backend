@@ -1,10 +1,6 @@
 const mongoose=require('mongoose')
 
 const  PatientSchema=mongoose.Schema({
-    id:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true
-    },
     nom:{
         type:String,
         required:true
@@ -40,6 +36,10 @@ const  PatientSchema=mongoose.Schema({
     numero_cnss:{
         type:String,
         required:true
+    },
+    medecin:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Medecin'
     },
 });
 
