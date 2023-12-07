@@ -12,7 +12,7 @@ const  PatientSchema=mongoose.Schema({
     },
     email:{
         type:String,
-        required:truess
+        required:true
     },
     password:{
         type:String,
