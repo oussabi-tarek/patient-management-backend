@@ -1,10 +1,6 @@
 const mongoose=require('mongoose')
 
 const  PatientSchema=mongoose.Schema({
-    id:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true
-    },
     nom:{
         type:String,
         required:true
@@ -15,7 +11,7 @@ const  PatientSchema=mongoose.Schema({
     },
     email:{
         type:String,
-        required:truess
+        required:true
     },
     password:{
         type:String,

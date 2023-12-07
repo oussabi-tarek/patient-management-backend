@@ -4,15 +4,18 @@ const port = process.env.PORT || 5000;
 const connectDB = require('./config/db.config');
 const {errorHandler} = require('./middleware/errorHandler')
 connectDB()
+const Patient = require('./model/Patient')
 
 const app = express()
+
 
 
 app.use(errorHandler)
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/api/assistants', require('./routes/assistantRoutes'));
+app.use('/api/patient', require('./routes/patientRoutes'));
+
 
 
 
