@@ -1,9 +1,9 @@
 const express = require('express')
 require('dotenv').config();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 const connectDB = require('./config/db.config');
 const {errorHandler} = require('./middleware/errorHandler')
-const patientController = require('./controllers/patient.controller')
+const patientController = require('./controller/patient.controller')
 const patientRoutes = require('./routes/patient.routes');
 connectDB()
 
@@ -18,9 +18,6 @@ app.use(express.urlencoded({ extended: false }));
 // app.use('/api/patient', require('./routes/patientRoutes'));
 app.use('/api/patients', patientRoutes)
 app.use('/login', patientController.loginPatient)
-
-
-
 
 
 

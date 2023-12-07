@@ -1,32 +1,16 @@
-const express = require('express');
-const router = express.Router();
-const rdvController = require('../controllers/rdvController');
+const rdvController = require('../controller/rdv.controller');
+const { authenticateJWT } = require('../middleware/authenticateJWT.middleware');
 
-// Middleware to check JWT authentication for protected routes
-const authenticateJWT = (req, res, next) => {
-    const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-    if (!token) {
-      return res.status(401).json({ error: 'Unauthorized: Token not provided' });
-    }
-  
-    try {
-      jwt.verify(token, process.env.JWT_SECRET);
-      next();
-    } catch (error) {
-      return res.status(401).json({ error: 'Unauthorized: Invalid token' });
-    }
-};
+module.exports = function(app){
+   // Get appointments for a specific patient
+    app.get('/appointments', authenticateJWT, rdvController.getAppointmentsForPatient);
 
-// Get appointments for a specific patient
-router.get('/appointments', authenticateJWT, rdvController.getAppointmentsForPatient);
+    // Create a new appointment
+    app.post('/appointments', authenticateJWT, rdvController.createAppointment);
 
-// Create a new appointment
-router.post('/appointments', authenticateJWT, rdvController.createAppointment);
+    // Update an existing appointment
+    app.put('/appointments/:id', authenticateJWT, rdvController.updateAppointment);
 
-// Update an existing appointment
-router.put('/appointments/:id', authenticateJWT, rdvController.updateAppointment);
-
-// Delete an existing appointment
-router.delete('/appointments/:id', authenticateJWT, rdvController.deleteAppointment);
-
-module.exports = router;
+    // Delete an existing appointment
+    app.delete('/appointments/:id', authenticateJWT, rdvController.deleteAppointment);
+}

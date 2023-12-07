@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const Patient = require('../model/Patient');
 
 const generateToken = (userId) => {
@@ -10,7 +10,7 @@ const generateToken = (userId) => {
 };
 
 const registerPatient = asyncHandler(async (req, res) => {
-  const {
+  let {
     nom,
     prenom,
     email,
@@ -27,6 +27,7 @@ const registerPatient = asyncHandler(async (req, res) => {
   if (existingPatient) {
     res.status(400).json({ error: 'Email is already registered' });
   } else {
+    date_naissance = Date.parse(date_naissance);
     const newPatient = new Patient({
       nom,
       prenom,
