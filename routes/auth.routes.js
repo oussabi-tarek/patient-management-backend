@@ -1,5 +1,5 @@
-const patientController = require('../controller/patient.controller')
+const authController = require('../controller/auth.controller')
 
 module.exports=function(app){
-    app.post('/api/login', patientController.loginPatient)
+    app.post('/api/login', authController.login)
 }   
