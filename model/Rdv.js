@@ -1,4 +1,3 @@
-const sequelize=require('../model/db')
 const mongoose=require('mongoose')
 
 const RdvSchema=mongoose.Schema({

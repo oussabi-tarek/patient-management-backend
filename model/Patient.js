@@ -1,4 +1,5 @@
 const mongoose=require('mongoose')
+const bcrypt = require('bcryptjs');
 
 
 const  PatientSchema=mongoose.Schema({
@@ -46,6 +47,9 @@ const  PatientSchema=mongoose.Schema({
     ],
 });
 
+   PatientSchema.methods.comparePassword = async function(enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+   }
 
 const Patient=mongoose.model('Patient',PatientSchema,'patient');
 
