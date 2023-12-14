@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const bcrypt = require('bcryptjs');
 
-const AssissstantSchema = mongoose.Schema({
+const AssistantSchema = mongoose.Schema({
   nom: {
     type: String,
     required: true,
@@ -32,10 +33,16 @@ const AssissstantSchema = mongoose.Schema({
   },
 });
 
-const Assisstant = mongoose.model(
-  "Assisstant",
-  AssissstantSchema,
-  "assisstant"
+// Méthode pour comparer les mots de passe hachés
+AssistantSchema.methods.comparePassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
+
+
+const Assistant = mongoose.model(
+  "Assistant",
+  AssistantSchema,
+  "assistant"
 );
 
-module.exports = Assisstant;
+module.exports = Assistant;
