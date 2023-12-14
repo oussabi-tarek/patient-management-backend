@@ -1,3 +1,4 @@
+const sequelize=require('../model/db')
 const mongoose=require('mongoose')
 
 const RdvSchema=mongoose.Schema({
@@ -12,7 +13,7 @@ const RdvSchema=mongoose.Schema({
     etat:{
         type:String,
         required:true,
-        enum:['annulé','réel']
+        enum:['annulé','réel','en attente']
     },
     type:{
         type:String,
@@ -39,4 +40,6 @@ const RdvSchema=mongoose.Schema({
     },
 });
 
-const Rdv=mongoose.model('Rdv',RdvSchema);
+const Rdv=mongoose.model('Rdv',RdvSchema,'rdv');
+
+module.exports=Rdv;

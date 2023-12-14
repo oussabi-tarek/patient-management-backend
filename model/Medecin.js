@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
 const MedecinSchema = mongoose.Schema({
     nom:{
@@ -38,16 +37,11 @@ const MedecinSchema = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'Service',
     },
-    assistant:{
+    assisstant:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Assistant',
+        ref:'Assisstant',
     }
 });
-
-// Méthode pour comparer les mots de passe hachés
-MedecinSchema.methods.comparePassword = async function (candidatePassword) {
-    return await bcrypt.compare(candidatePassword, this.password);
-  };
 
 const Medecin=mongoose.model('Medecin',MedecinSchema,'medecin');
 
