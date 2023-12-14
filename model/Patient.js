@@ -1,5 +1,5 @@
 const mongoose=require('mongoose')
-const bcrypt = require('bcryptjs');
+
 
 const  PatientSchema=mongoose.Schema({
     nom:{
@@ -46,10 +46,6 @@ const  PatientSchema=mongoose.Schema({
     ],
 });
 
-// Méthode pour comparer les mots de passe hachés
-PatientSchema.methods.comparePassword = async function (candidatePassword) {
-    return await bcrypt.compare(candidatePassword, this.password);
-  };
 
 const Patient=mongoose.model('Patient',PatientSchema,'patient');
 
