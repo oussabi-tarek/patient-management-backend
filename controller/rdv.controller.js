@@ -44,7 +44,7 @@ exports.createAppointment = async (req, res) => {
       }
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const patientId = decoded.patientId;
+      const patientId = decoded.userId;
 
       // Fetch patient information using the obtained patientId
       const patient = await Patient.findById(patientId);
