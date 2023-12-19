@@ -16,4 +16,8 @@ module.exports = function(app){
     
     // Download document
     app.get('/documents/:rdvId/:index', rdvController.downloadDocument);
+
+    // Get appointments for a specific doctor
+    app.get('/appointments/doctor', authenticateJWT, rdvController.getAppointmentsForDoctor);
+
 }

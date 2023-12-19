@@ -18,6 +18,9 @@ exports.getAppointmentsForPatient = async (req, res) => {
     // Verify the JWT token and extract the patient ID
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const patientId = decoded.userId;
+    const patientId = decoded.id;
+    console.log("patientId:"+decoded.id);
+
 
     // Now we can use the patientId to fetch appointments
     const appointments = await Rdv.find({ patient: patientId });
@@ -27,6 +30,25 @@ exports.getAppointmentsForPatient = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getAppointmentsForDoctor=async(req,res)=>{
+  const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized: Token not provided' });
+  }
+  try {
+    // Verify the JWT token and extract the patient ID
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const doctorId = decoded.id;
+
+    // Now we can use the patientId to fetch appointments
+    const appointments = await Rdv.find({ medecin: doctorId });
+    res.json(appointments);
+  } catch (error) {
+    // Handle token verification or database errors
+    res.status(500).json({ error: error.message });
+  }
+}
 
 exports.createAppointment = async (req, res) => {
   try {
