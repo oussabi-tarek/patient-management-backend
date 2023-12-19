@@ -13,4 +13,7 @@ module.exports = function(app){
 
     // Delete an existing appointment
     app.delete('/appointments/:id', authenticateJWT, rdvController.deleteAppointment);
+    
+    // Download document
+    app.get('/documents/:rdvId/:index', rdvController.downloadDocument);
 }

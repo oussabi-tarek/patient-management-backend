@@ -21,8 +21,18 @@ const RdvSchema=mongoose.Schema({
     },
     documents:[
         {
-            type:Buffer,
-            required:false
+          name: {
+            type: String,
+            required: false
+          },
+          type: {
+            type: String,
+            required: false
+          },
+          data: {
+            type: Buffer,
+            required: false
+          }
         }
     ],
     patient:{
