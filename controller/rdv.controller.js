@@ -101,7 +101,7 @@ exports.getAppointmentsForDoctorAndPatient=async(req,res)=>{
     // Now we can use the patientId to fetch appointments
       const appointments = await Rdv.find({ medecin: doctorId,patient:patientId}).populate({
         path: 'patient',
-        select:'-__v -password -medecins'
+        select:'-__v -password'
       }).exec();
     res.json(appointments);
   } catch (error) {
