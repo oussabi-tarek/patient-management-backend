@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt=require("bcryptjs")
 
 const MedecinSchema = mongoose.Schema({
     nom:{
@@ -42,7 +43,9 @@ const MedecinSchema = mongoose.Schema({
         ref:'Assisstant',
     }
 });
-
+    MedecinSchema.methods.comparePassword = async function(enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+   }
 const Medecin=mongoose.model('Medecin',MedecinSchema,'medecin');
 
 module.exports=Medecin;
