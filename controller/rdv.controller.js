@@ -17,8 +17,10 @@ exports.getAppointmentsForPatient = async (req, res) => {
   try {
     // Verify the JWT token and extract the patient ID
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const patientId = decoded.userId;
     const patientId = decoded.id;
     console.log("patientId:"+decoded.id);
+
 
     // Now we can use the patientId to fetch appointments
     const appointments = await Rdv.find({ patient: patientId });
@@ -141,7 +143,13 @@ exports.createAppointment = async (req, res) => {
         cause,
         type,
         etat:'',
-        documents: req.file!==undefined ? req.file.buffer:[],
+        documents: [
+          {
+            name: req.file.originalname,
+            type: req.file.mimetype,
+            data: req.file.buffer,
+          },
+        ],
         patient: patient._id,
         medecin: medecinId,
       });
@@ -181,7 +189,7 @@ exports.updateAppointment = async (req, res) => {
       }
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const patientId = decoded.patientId;
+      const patientId = decoded.userId;
 
       // Fetch the existing appointment
       const existingAppointment = await Rdv.findById(appointmentId);
@@ -206,8 +214,13 @@ exports.updateAppointment = async (req, res) => {
       existingAppointment.date = date || existingAppointment.date;
       existingAppointment.cause = cause || existingAppointment.cause;
       existingAppointment.type = type || existingAppointment.type;
-      existingAppointment.documents = req.file?.buffer || existingAppointment.documents;
-
+      if (req.body.documents && req.body.documents.data) {
+        existingAppointment.documents = [{
+          name: req.body.documents.name,
+          type: req.body.documents.type,
+          data: Buffer.from(req.body.documents.data, 'base64'),
+        }];
+      }
       // Save the updated appointment
       const updatedAppointment = await existingAppointment.save();
       res.json(updatedAppointment);
@@ -229,7 +242,7 @@ exports.deleteAppointment = async (req, res) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const patientId = decoded.patientId;
+    const patientId = decoded.userId;
 
     // Find the appointment
     const existingAppointment = await Rdv.findById(appointmentId);
@@ -255,3 +268,25 @@ exports.deleteAppointment = async (req, res) => {
   }
 };
 
+exports.downloadDocument = async (req, res) => {
+  try {
+    const { rdvId, index } = req.params;
+    const appointment = await Rdv.findById(rdvId);
+
+    if (!appointment || !appointment.documents[index]) {
+      return res.status(404).send('File not found');
+    }
+
+    const document = appointment.documents[index];
+
+    res.set({
+      'Content-Type': document.type,
+      'Content-Disposition': `attachment; filename="${document.name}"`,
+    });
+
+    res.send(document.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
