@@ -1,4 +1,6 @@
 node_modules
 .env
 draft_patient.json
+draft_medecin.json
+draft_assistant.json
 

@@ -12,7 +12,7 @@ const RdvSchema=mongoose.Schema({
     etat:{
         type:String,
         required:true,
-        enum:['annulé','réel']
+        enum:['annulé','réel','en attente']
     },
     type:{
         type:String,
@@ -21,8 +21,18 @@ const RdvSchema=mongoose.Schema({
     },
     documents:[
         {
-            type:Buffer,
-            required:false
+          name: {
+            type: String,
+            required: false
+          },
+          type: {
+            type: String,
+            required: false
+          },
+          data: {
+            type: Buffer,
+            required: false
+          }
         }
     ],
     patient:{
@@ -39,4 +49,6 @@ const RdvSchema=mongoose.Schema({
     },
 });
 
-const Rdv=mongoose.model('Rdv',RdvSchema);
+const Rdv=mongoose.model('Rdv',RdvSchema,'rdv');
+
+module.exports=Rdv;

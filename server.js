@@ -15,9 +15,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 require('./routes/chat.routes')(app);
-require('./routes/patient.routes')(app);
+require('./routes/user.routes')(app);
 require('./routes/rdv.routes')(app);
-require('./routes/auth.routes')(app);
+require('./routes/medecin.routes')(app);
+require('./routes/service.routes')(app);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);

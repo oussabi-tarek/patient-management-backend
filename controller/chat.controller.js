@@ -4,7 +4,6 @@ exports.chatAuthenticator = async function(req, res, next) {
     const { username } = req.body;
     // Get or create user on Chat Engine!
     try {
-        console.log("username: " + username);
       const r = await axios.put(
         "https://api.chatengine.io/users/",
         { username: username, secret: username, first_name: username },
