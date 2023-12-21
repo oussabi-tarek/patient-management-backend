@@ -14,5 +14,9 @@ module.exports = function(app){
     // Delete an existing appointment
     app.delete('/appointments/:id', authenticateJWT, rdvController.deleteAppointment);
     // Get appointments for a specific doctor
-    app.get('/appointments/doctor', authenticateJWT, rdvController.getAppointmentsForDoctor);
+    app.get('/appointments/doctor/:date', authenticateJWT, rdvController.getAppointmentsForDoctor);
+    // Get appointments for a specific doctor and a specific patient
+    app.get('/appointments/doctor/:doctorId/patient/:patientId', authenticateJWT, rdvController.getAppointmentsForDoctorAndPatient);
+    // get current appointment for a specific doctor
+    app.get('/appointments/current/doctor', authenticateJWT, rdvController.getCurrentAppointmentForDoctor);
 }
