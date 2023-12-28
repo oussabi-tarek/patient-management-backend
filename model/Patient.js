@@ -44,12 +44,9 @@ const PatientSchema = mongoose.Schema({
       ref: "Medecin",
     },
   ],
-  imageProfile: [
-    {
-      data: Buffer,
-      contentType: String,
-    },
-  ],
+  imageProfile: {
+    type: String,
+  },
 });
 
 // Méthode pour comparer les mots de passe hachés

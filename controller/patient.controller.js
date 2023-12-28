@@ -88,6 +88,9 @@ const loginPatient = asyncHandler(async (req, res) => {
         date_naissance: patient.date_naissance.toLocaleDateString("en-CA"),
         sexe: patient.sexe,
         numero_cnss: patient.numero_cnss,
+        imageProfile:patient.imageProfile,
+        patientImage: patient.patientImage
+
       },
     });
   } else {
@@ -125,8 +128,6 @@ const updatePatient = asyncHandler(async (req, res) => {
     sexe,
     numero_cnss,
   } = req.body;
-  // console.log(nom)
-  // console.log(await Patient.findOne({_id}))
   try {
     //   // Check if _id is valid
     // if (!_id || !mongoose.Types.ObjectId.isValid(_id)) {
@@ -183,14 +184,11 @@ const updateImageProfile = asyncHandler(async (req, res) => {
       return res.status(404).json({ error: "Patient not found" });
     }
 
-    if (!req.file) {
+    if (!req.body.base64) {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    foundedPatient.imageProfile = {
-      data: req.file.buffer,
-      contentType: req.file.mimetype,
-    };
+    foundedPatient.imageProfile = req.body.base64
 
     await foundedPatient.save();
 
@@ -220,7 +218,7 @@ const deleteImageProfile = asyncHandler(async (req, res) => {
     }
 
     // Set imageProfile to null to delete the image
-    foundedPatient.imageProfile = []
+    foundedPatient.imageProfile = ""
 
     await foundedPatient.save();
 
