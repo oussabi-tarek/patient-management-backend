@@ -30,7 +30,6 @@ const ConsultationSchema = mongoose.Schema({
             required: false
         }
     ],
-
 });
 
 const Consultation = mongoose.model('Consultation', ConsultationSchema, 'consultation');
