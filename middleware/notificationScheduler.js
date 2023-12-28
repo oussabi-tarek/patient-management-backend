@@ -1,4 +1,5 @@
 const Rdv = require('../model/Rdv');
+const notificationService = require("./notificationService");
 
 const scheduleAppointmentNotifications = async () => {
   try {
