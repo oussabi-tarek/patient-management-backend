@@ -34,6 +34,10 @@ const MedecinSchema = mongoose.Schema({
         type:String,
         required:true
     },
+    image:{
+        type:Buffer,
+        required:true
+    },
     service:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Service',
