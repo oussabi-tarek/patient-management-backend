@@ -18,7 +18,7 @@ exports.getAppointmentsForPatient = async (req, res) => {
     // Verify the JWT token and extract the patient ID
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const patientId = decoded.userId;
-    const patientId = decoded.id;
+    // const patientId = decoded.id;
     console.log("patientId:"+decoded.id);
 
 

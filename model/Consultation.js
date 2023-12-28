@@ -36,3 +36,4 @@ const ConsultationSchema = mongoose.Schema({
 const Consultation = mongoose.model('Consultation', ConsultationSchema, 'consultation');
 
 module.exports = Consultation;
+
