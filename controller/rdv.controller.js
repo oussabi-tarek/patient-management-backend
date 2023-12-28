@@ -107,6 +107,16 @@ exports.getAppointmentsForDoctorAndPatient=async(req,res)=>{
       const appointments = await Rdv.find({ medecin: doctorId,patient:patientId}).populate({
         path: 'patient',
         select:'-__v -password'
+      }).populate({
+        path: 'medecin',
+        select:'-__v -password',
+        populate:{
+          path:'service',
+          select:'libelle'
+        }
+      }).populate({
+        path: 'consultation',
+        select:'-__v',
       }).exec();
     res.json(appointments);
   } catch (error) {
