@@ -226,30 +226,21 @@ exports.updateAppointment = async (req, res) => {
       const datetimeString = time ? `${date}T${time.padStart(5, '0')}:00.000+00:00` : existingAppointment.date;
       const datetime = new Date(datetimeString);
 
-      // If documents are provided and the array is valid, update them
+      // If documents are provided and the array is valid, add new documents
       if (req.body.documents && Array.isArray(req.body.documents)) {
         // Filter out existing documents with the same name
-        const newDocuments = req.body.documents.filter(newDoc => {
-          return !existingAppointment.documents.some(existingDoc => existingDoc.name === newDoc.name);
-        });
+        const newDocuments = req.body.documents.filter(newDoc => (
+          !existingAppointment.documents.some(existingDoc => existingDoc.name === newDoc.name)
+        ));
 
-        // If documents are provided and the array is valid, update them
-        if (req.body.documents && Array.isArray(req.body.documents)) {
-          // Filter out existing documents with the same name
-          const newDocuments = req.body.documents.filter(newDoc => {
-            return !existingAppointment.documents.some(existingDoc => existingDoc.name === newDoc.name);
-          });
-
-          // Append new documents to the existing ones
-          existingAppointment.documents = [
-            ...existingAppointment.documents,
-            ...newDocuments.map(doc => ({
-              name: doc.name,
-              type: doc.type,
-              data: doc.data ? Buffer.from(doc.data, 'base64') : undefined,
-            })),
-          ];
-        }
+        // Append new documents to the existing ones with debug logging
+        existingAppointment.documents.push(
+          ...newDocuments.map(doc => ({
+            name: doc.name,
+            type: doc.type,
+            data: doc.data ? Buffer.from(doc.data, 'base64') : undefined,
+          }))
+        );
       }
 
       // Update the appointment fields
@@ -261,7 +252,8 @@ exports.updateAppointment = async (req, res) => {
       const updatedAppointment = await existingAppointment.save();
       res.json(updatedAppointment);
     });
-  } catch (error) {
+  } catch (error) {  console.error('Error updating appointment:', error.response.data);
+
     res.status(500).json({ error: error.message });
   }
 };
