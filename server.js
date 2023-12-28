@@ -24,6 +24,7 @@ require('./routes/rdv.routes')(app);
 require('./routes/medecin.routes')(app);
 require('./routes/service.routes')(app);
 require('./routes/consultation.routes')(app);
+require('./routes/assistant.routes')(app);
 
 require('./routes/patient.routes')(app);
 require('./routes/facture.routes')(app);
