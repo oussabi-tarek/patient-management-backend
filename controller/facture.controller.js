@@ -2,20 +2,27 @@ const Consultation = require("../model/Consultation");
 const Service = require("../model//Service");
 const Rdv = require("../model/Rdv");
 const Assistant = require("../model/Assistant");
+const mongoose = require("mongoose");
 
 // Function to get all the information for the facture
 async function getFactureInformation(consultationId) {
   try {
-    const consultation = await Consultation.findOne(consultationId);
-    if (!consultation) {
-      throw new Error("Consultation not found");
+    console.log(consultationId);
+    if (!mongoose.isValidObjectId(consultationId)) {
+      return { error: "consultation not found" };
     }
-    const rdv = await Rdv.findOne(consultationId).populate("medecin patient");
+    const consultation = await Consultation.findById(consultationId);
+    if (!consultation) {
+      return { error: "Consultation not found" };
+    }
+    const rdv = await Rdv.findOne({ consultation: consultation._id }).populate(
+      "medecin patient"
+    );
     const patient = rdv.patient;
     const medecin = rdv.medecin;
-    const assistant = await Assistant.findOne(medecin.assistant);
-    const service = await Service.findOne(rdv.service);
-    console.log(assistant);
+    const service = await Service.findById(medecin.service);
+    console.log("-------------------");
+    console.log(service);
 
     const montant = 300;
     const factureInformation = {
@@ -24,10 +31,9 @@ async function getFactureInformation(consultationId) {
       consultation: consultationId,
       dateConsultation: consultation.date,
       etatConsultation: consultation.etat,
+      typeConsultation: rdv.type,
       doctorName: `${medecin.nom} ${medecin.prenom}`,
-      assistantName: `${assistant.nom} ${assistant.prenom}`,
       serviceName: service.libelle,
-      consultationDate: consultation.date,
       patientName: `${patient.nom} ${patient.prenom}`,
       patientEmail: patient.email,
       patientAddress: patient.adresse,
