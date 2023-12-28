@@ -1,6 +1,8 @@
 const express=require('express');
 const cors=require('cors');
 const bodyParser = require('body-parser');
+const { scheduleAppointmentNotifications } = require('./middleware/notificationScheduler');
+const cron = require('node-cron');
 
 require('dotenv').config();
 const PORT = process.env.PORT || 8080;
@@ -28,6 +30,15 @@ require('./routes/consultation.routes')(app);
 require('./routes/patient.routes')(app);
 require('./routes/facture.routes')(app);
 
+// Schedule the job to run every 10 minutes
+cron.schedule('*/10 * * * *', async () => {
+    try {
+      console.log('Automatically triggering tomorrow notifications...');
+      await scheduleAppointmentNotifications();
+    } catch (error) {
+      console.error('Error triggering tomorrow notifications:', error);
+    }
+  });
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
