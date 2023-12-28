@@ -17,6 +17,10 @@ module.exports = function(app){
     // Download document
     app.get('/documents/:rdvId/:index', rdvController.downloadDocument);
 
+    app.post('/check-availability', rdvController.checkAvailability);
+
+    app.delete('/appointments/:appointmentId/documents/:documentIndex', rdvController.deleteDocument);
+
     // Get appointments for a specific doctor
 
     app.get('/appointments/doctor/:date', authenticateJWT, rdvController.getAppointmentsForDoctor);
