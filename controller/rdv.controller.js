@@ -21,7 +21,7 @@ exports.getAppointmentsForPatient = async (req, res) => {
   try {
     // Verify the JWT token and extract the patient ID
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const patientId = decoded.userId;
+    const patientId = decoded.id;
     console.log("patientId:"+decoded.id);
 
 
@@ -146,7 +146,7 @@ exports.createAppointment = async (req, res) => {
       }
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const patientId = decoded.userId;
+      const patientId = decoded.id;
 
       // Fetch patient information using the obtained patientId
       const patient = await Patient.findById(patientId);
@@ -209,7 +209,7 @@ exports.updateAppointment = async (req, res) => {
       }
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const patientId = decoded.userId;
+      const patientId = decoded.id;
 
       // Fetch the existing appointment
       const existingAppointment = await Rdv.findById(appointmentId);
@@ -270,7 +270,7 @@ exports.deleteAppointment = async (req, res) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const patientId = decoded.userId;
+    const patientId = decoded.id;
 
     // Find the appointment
     const existingAppointment = await Rdv.findById(appointmentId);

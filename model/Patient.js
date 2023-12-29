@@ -44,7 +44,7 @@ const PatientSchema = mongoose.Schema({
       ref: "Medecin",
     },
   ],
-  imageProfile: {
+  image: {
     type: String,
   },
 });
