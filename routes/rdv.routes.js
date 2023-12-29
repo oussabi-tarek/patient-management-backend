@@ -7,7 +7,7 @@ module.exports = function(app){
 
     // Create a new appointment
     app.post('/appointments', authenticateJWT, rdvController.createAppointment);
-
+    
     // Update an existing appointment
     app.put('/appointments/:id', authenticateJWT, rdvController.updateAppointment);
 
@@ -30,5 +30,17 @@ module.exports = function(app){
     app.get('/appointments/current/doctor', authenticateJWT, rdvController.getCurrentAppointmentForDoctor);
 
     app.get('/appointments/doctor', authenticateJWT, rdvController.getAppointmentsForDoctor);
+
+    // Get pending appointments for the medecin associated with the assistant
+    app.get('/appointments/pending', authenticateJWT,rdvController.getPendingAppointmentsForAssistant);
+    
+    //Get appointments in waiting and those validated
+    app.get('/appointments/forAssistant',authenticateJWT,rdvController.getAppointmentsForAssistant )
+    //Validate appointment
+    app.put('/appointments/:id/validate', authenticateJWT,rdvController.validateAppointment);
+    
+    //Cancel appointment
+    app.put('/appointments/:id/cancel', authenticateJWT,rdvController.cancelAppointment);
+
 
 }
