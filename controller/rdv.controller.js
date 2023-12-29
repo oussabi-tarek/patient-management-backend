@@ -9,6 +9,7 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // Adjust the file size limit as needed
 }).array('documents', 5); // 'documents' is the field name for the files, and 5 is the maximum number of files
 const moment = require('moment');
+const Assisstant = require('../model/Assistant');
 
 exports.getAppointmentsForPatient = async (req, res) => {
   // Extract the JWT token from the request headers
@@ -192,6 +193,131 @@ exports.createAppointment = async (req, res) => {
   }
 };
 
+// exports.updateAppointment = async (req, res) => {
+//   try {
+//     upload(req, res, async (err) => {
+//       if (err) {
+//         return res.status(400).json({ error: 'File upload failed.' });
+//       }
+
+//       const appointmentId = req.params.id;
+//       const { date, time, cause, type } = req.body;
+
+//       // Extract the JWT token from the request headers
+//       const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+
+//       if (!token) {
+//         return res.status(401).json({ error: 'Unauthorized: Token not provided' });
+//       }
+
+//       // Extract the user ID from the JWT token
+//       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//       const userId = decoded.id;
+
+//       // Fetch the existing appointment
+//       const existingAppointment = await Rdv.findById(appointmentId);
+//       if (!existingAppointment) {
+//         return res.status(404).json({ error: 'Appointment not found.' });
+//       }
+
+//       // Check if the user updating the appointment is the owner (patient)
+//       if (existingAppointment.patient.toString() === userId) {
+//         // If the date is being modified, check if the medecin has an appointment on the chosen date
+//         if (date && date !== moment(existingAppointment.date).format('YYYY-MM-DD')) {
+//           const medecinExistingAppointment = await Rdv.findOne({ date, medecin: existingAppointment.medecin });
+//           if (medecinExistingAppointment) {
+//             return res.status(400).json({ error: 'Selected medecin already has an appointment on the specified date.' });
+//           }
+//         }
+
+// <<<<<<< HEAD
+//         // Update the appointment fields
+//         existingAppointment.date = date || existingAppointment.date;
+//         existingAppointment.cause = cause || existingAppointment.cause;
+//         existingAppointment.type = type || existingAppointment.type;
+
+//         if (req.body.documents && req.body.documents.data) {
+//           existingAppointment.documents = [{
+//             name: req.body.documents.name,
+//             type: req.body.documents.type,
+//             data: Buffer.from(req.body.documents.data, 'base64'),
+//           }];
+//         }
+
+//         // Save the updated appointment
+//         const updatedAppointment = await existingAppointment.save();
+//         return res.json(updatedAppointment);
+//       } else {
+//         // The user is not the owner (patient), check if the user is the assistant of the medecin
+//         const medecin = await Medecin.findOne({ _id: existingAppointment.medecin, assisstant: userId });
+//         if (medecin) {
+//           // If the date is being modified, check if the medecin has an appointment on the chosen date
+//           if (date && date !== moment(existingAppointment.date).format('YYYY-MM-DD')) {
+//             const medecinExistingAppointment = await Rdv.findOne({ date, medecin: existingAppointment.medecin });
+//             if (medecinExistingAppointment) {
+//               return res.status(400).json({ error: 'Selected medecin already has an appointment on the specified date.' });
+//             }
+//           }
+
+//           // Update the appointment fields
+//           existingAppointment.date = date || existingAppointment.date;
+//           existingAppointment.cause = cause || existingAppointment.cause;
+//           existingAppointment.type = type || existingAppointment.type;
+
+//           if (req.body.documents && req.body.documents.data) {
+//             existingAppointment.documents = [{
+//               name: req.body.documents.name,
+//               type: req.body.documents.type,
+//               data: Buffer.from(req.body.documents.data, 'base64'),
+//             }];
+//           }
+
+//           // Save the updated appointment
+//           const updatedAppointment = await existingAppointment.save();
+//           return res.json(updatedAppointment);
+//         } else {
+//           // The user is neither the owner (patient) nor the assistant, forbidden
+//           return res.status(403).json({ error: 'Forbidden: You do not have permission to update this appointment.' });
+//         }
+//       }
+// =======
+//       // Combine date and time into a single string representing datetime
+//       const datetimeString = time ? `${date}T${time.padStart(5, '0')}:00.000+00:00` : existingAppointment.date;
+//       const datetime = new Date(datetimeString);
+
+//       // If documents are provided and the array is valid, add new documents
+//       if (req.body.documents && Array.isArray(req.body.documents)) {
+//         // Filter out existing documents with the same name
+//         const newDocuments = req.body.documents.filter(newDoc => (
+//           !existingAppointment.documents.some(existingDoc => existingDoc.name === newDoc.name)
+//         ));
+
+//         // Append new documents to the existing ones with debug logging
+//         existingAppointment.documents.push(
+//           ...newDocuments.map(doc => ({
+//             name: doc.name,
+//             type: doc.type,
+//             data: doc.data ? Buffer.from(doc.data, 'base64') : undefined,
+//           }))
+//         );
+//       }
+
+//       // Update the appointment fields
+//       existingAppointment.date = time ? datetime : existingAppointment.date;
+//       existingAppointment.cause = cause || existingAppointment.cause;
+//       existingAppointment.type = type || existingAppointment.type;
+
+//       // Save the updated appointment
+//       const updatedAppointment = await existingAppointment.save();
+//       res.json(updatedAppointment);
+// >>>>>>> 78ef922ef8a051b6cfe6aef28cec934715bf765d
+//     });
+//   } catch (error) {  console.error('Error updating appointment:', error.response.data);
+
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
 exports.updateAppointment = async (req, res) => {
   try {
     upload(req, res, async (err) => {
@@ -202,24 +328,21 @@ exports.updateAppointment = async (req, res) => {
       const appointmentId = req.params.id;
       const { date, time, cause, type } = req.body;
 
-      // Extract the patient ID from the JWT token
+      // Extract the JWT token from the request headers
       const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+
       if (!token) {
         return res.status(401).json({ error: 'Unauthorized: Token not provided' });
       }
 
+      // Extract the user ID from the JWT token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const patientId = decoded.id;
+      const userId = decoded.id;
 
       // Fetch the existing appointment
       const existingAppointment = await Rdv.findById(appointmentId);
       if (!existingAppointment) {
         return res.status(404).json({ error: 'Appointment not found.' });
-      }
-
-      // Check if the patient updating the appointment matches the patient associated with the appointment
-      if (existingAppointment.patient.toString() !== patientId) {
-        return res.status(403).json({ error: 'Forbidden: You do not have permission to update this appointment.' });
       }
 
       // Combine date and time into a single string representing datetime
@@ -252,8 +375,8 @@ exports.updateAppointment = async (req, res) => {
       const updatedAppointment = await existingAppointment.save();
       res.json(updatedAppointment);
     });
-  } catch (error) {  console.error('Error updating appointment:', error.response.data);
-
+  } catch (error) {
+    console.error('Error updating appointment:', error.response.data);
     res.status(500).json({ error: error.message });
   }
 };
@@ -319,6 +442,119 @@ exports.downloadDocument = async (req, res) => {
   }
 };
 
+
+
+
+
+////////////Assistant usage APIs/////////////////////////////
+
+exports.getPendingAppointmentsForAssistant = async (req, res) => {
+  try {
+    // Extract the JWT token from the request headers
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized: Token not provided ' });
+    }
+
+    // Decode the token to get the assistant ID
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const assistantId = decoded.id;
+
+    // Retrieve the assistant to get the associated medecin
+    const assistant = await Assisstant.findById(assistantId);
+    if (!assistant) {
+      return res.status(404).json({ error: 'Assistant not found' });
+    }
+
+    // Retrieve the medecin associated with the assistant
+    const medecin = await Medecin.findOne({ assisstant: assistantId });
+    if (!medecin) {
+      return res.status(404).json({ error: 'Medecin not found for the assistant' });
+    }
+
+    // Retrieve the pending appointments for the medecin
+    const pendingAppointments = await Rdv.find({ medecin: medecin._id, etat: 'en attente' });
+
+    res.json(pendingAppointments);
+  } catch (error) {
+    // Handle token verification or database errors
+    res.status(500).json({ error: error.message });
+  }
+};
+// Fonction pour lister les rendez-vous en attente de validation et validés sans consultation
+exports.getAppointmentsForAssistant = async (req, res) => {
+  try {
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized: Token not provided' });
+    }
+
+    // Decode the token to get the assistant ID
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const assistantId = decoded.id;
+
+    // Trouver l'assistant
+    const assistant = await Assisstant.findById(assistantId);
+
+    if (!assistant) {
+      return res.status(404).json({ error: 'Assistant not found.' });
+    }
+      // Retrieve the medecin associated with the assistant
+      const medecin = await Medecin.findOne({ assisstant: assistantId });
+      if (!medecin) {
+        return res.status(404).json({ error: 'Medecin not found for the assistant' });
+      }
+    // Liste des rendez-vous en attente de validation
+    const pendingAppointments = await Rdv.find({ medecin: medecin._id, etat: 'en attente' });
+
+    // Liste des rendez-vous validés mais sans consultation
+    const validatedAppointmentsWithoutConsultation = await Rdv.find({
+      medecin: medecin._id,
+      etat: 'réel',
+      consultation: null,
+    });
+
+    // Combinez les deux listes
+    const allAppointments = [...pendingAppointments, ...validatedAppointmentsWithoutConsultation];
+
+    res.json(allAppointments);
+  } catch (error) {
+    console.error('Error getting appointments for assistant:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+exports.validateAppointment = async (req, res) => {
+  try {
+      const appointmentId = req.params.id;
+      const updatedAppointment = await Rdv.findByIdAndUpdate(
+          appointmentId,
+          { etat: 'réel' },
+          { new: true }
+      );
+      res.json(updatedAppointment);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+};
+
+
+exports.cancelAppointment = async (req, res) => {
+  try {
+      const appointmentId = req.params.id;
+      const updatedAppointment = await Rdv.findByIdAndUpdate(
+          appointmentId,
+          { etat: 'annulé' },
+          { new: true }
+      );
+      res.json(updatedAppointment);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+}
 exports.checkAvailability = async (req, res) => {
   try {
     const { doctorId, date } = req.body;
