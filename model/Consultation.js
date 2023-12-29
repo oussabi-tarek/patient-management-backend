@@ -12,7 +12,7 @@ const ConsultationSchema = mongoose.Schema({
     etat: {
         type: String,
         required: true,
-        enum: ['close', 'contrôle']
+        enum: ['close', 'contrôle','en cours']
     },
     ordonnance: {
         type: Buffer,

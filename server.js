@@ -19,6 +19,7 @@ require('./routes/user.routes')(app);
 require('./routes/rdv.routes')(app);
 require('./routes/medecin.routes')(app);
 require('./routes/service.routes')(app);
+require('./routes/consultation.routes')(app);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);

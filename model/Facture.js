@@ -15,3 +15,6 @@ const  FactureSchema = mongoose.Schema({
     },
 });
     
+const Facture=mongoose.model('Facture',FactureSchema,'facture');
+
+module.exports=Facture;

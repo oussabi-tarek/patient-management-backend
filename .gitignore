@@ -3,4 +3,9 @@ node_modules
 draft_patient.json
 draft_medecin.json
 draft_assistant.json
-
+draft.txt
+hopital_db.service.json
+hopital_db.patient.json
+hopital_db.medecin.json
+hopital_db.consultation.json
+hopital_db.assistant.json
