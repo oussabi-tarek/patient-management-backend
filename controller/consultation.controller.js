@@ -25,6 +25,7 @@ exports.getUnbilledConsultations = async (req, res) => {
 
     // Decode the token to get the assistant ID
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
     const assistantId = decoded.id;
 
     // Trouver l'assistant
@@ -69,8 +70,9 @@ exports.getUnbilledConsultations = async (req, res) => {
     // Formattez les données pour inclure le nom du patient
     const formattedConsultations = unbilledConsultations.map((consultation) => ({
       ...consultation.toObject(),
-      patient: rdvs.find((rdv) => rdv.consultation.equals(consultation._id)).patient,
+      patient: rdvs.find((rdv) => rdv.consultation && rdv.consultation.equals(consultation._id)).patient,
     }));
+    console.log(formattedConsultations)
     res.json(formattedConsultations);
   } catch (error) {
     res.status(500).json({ error: error.message });

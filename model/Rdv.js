@@ -12,7 +12,7 @@ const RdvSchema=mongoose.Schema({
     etat:{
         type:String,
         required:true,
-        enum:['annulé','réel','en attente'],
+        enum:['annulé','réel','en attente','close'],
         default:'en attente'
     },
     type:{
