@@ -104,8 +104,7 @@ const saveFacture = async (req, res) => {
 
 const getFacture = async (req, res) => {
   try {
-    console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
-    const { consultationId } = req.params;
+    const { consultationId } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(consultationId)) {
       return res.status(400).json({ error: 'Invalid consultation ID' });
