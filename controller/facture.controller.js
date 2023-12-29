@@ -1,8 +1,8 @@
 const Consultation = require("../model/Consultation");
 const Service = require("../model//Service");
 const Rdv = require("../model/Rdv");
-const Assistant = require("../model/Assistant");
 const mongoose = require("mongoose");
+const Facture = require("../model/Facture");
 
 // Function to get all the information for the facture
 async function getFactureInformation(consultationId) {
@@ -72,4 +72,62 @@ const generateFacture = async (req, res) => {
   }
 };
 
-module.exports = generateFacture;
+const saveFacture = async (req, res) => {
+  try {
+    const { consultation } = req.body;
+    const file = req.file;
+
+    if (!file) {
+      console.log("No file uploaded.");
+      return res.status(400).json({ error: "No file uploaded." });
+    }
+
+    console.log("File received:", file);
+
+    const newFacture = new Facture({
+      consultation: consultation,
+      document: {
+        name: file.originalname,
+        type: file.mimetype,
+        data: file.buffer,
+      },
+    });
+    await newFacture.save();
+    
+    console.log("Facture saved successfully.");
+    res.json({ message: "success" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "error", error: err.message });
+  }
+};
+
+const getFacture = async (req, res) => {
+  try {
+    console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
+    const { consultationId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(consultationId)) {
+      return res.status(400).json({ error: 'Invalid consultation ID' });
+    }
+
+    // Find the facture based on the consultation ID
+    const facture = await Facture.findOne({ consultation: consultationId });
+
+    if (!facture) {
+      return res.status(404).json({ error: 'Facture not found for the given consultation ID' });
+    }
+
+    // Send the PDF data in the response
+    res.setHeader('Content-Type', 'application/pdf');
+    res.send(facture.document.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
+
+module.exports = { generateFacture, saveFacture, getFacture };

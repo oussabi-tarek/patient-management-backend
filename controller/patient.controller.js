@@ -211,7 +211,7 @@ const deleteImageProfile = asyncHandler(async (req, res) => {
       return res.status(400).json({ error: "Invalid patient ID" });
     }
 
-    const foundedPatient = await Patient.findOne({ _id: patientId });
+    const foundedPatient = await Patient.findById({ _id: patientId });
 
     if (!foundedPatient) {
       return res.status(404).json({ error: "Patient not found" });
@@ -226,7 +226,7 @@ const deleteImageProfile = asyncHandler(async (req, res) => {
     res.status(200).json({ message: "Profile image deleted successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error during deleting image" });
+    res.status(500).json({ error: error.message});
   }
 });
 
