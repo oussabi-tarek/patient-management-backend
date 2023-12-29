@@ -34,6 +34,10 @@ const AssissstantSchema = mongoose.Schema({
             type:String,
             required:true
         },
+        image:{
+            type:String,
+            required:true
+        },
 })
 // Méthode pour comparer les mots de passe hachés
 AssissstantSchema.methods.comparePassword = async function (candidatePassword) {

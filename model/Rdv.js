@@ -20,6 +20,10 @@ const RdvSchema=mongoose.Schema({
         required:true,
         enum:["en ligne","sur place"]
     },
+    notificationSent: {
+        type: Boolean,
+        default: false
+    },
     documents:[
         {
           name: {

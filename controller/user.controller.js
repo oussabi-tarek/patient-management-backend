@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 const Patient = require('../model/Patient');
 const Medecin = require('../model/Medecin');
+const Service =require('../model/Service');
 const Assistant = require('../model/Assistant');
 const generateToken = require('../middleware/generateToken.middleware');
 
@@ -70,6 +71,8 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const register = async (req, res, Model) => {
   let userData = req.body;
+  const { type } = req.body;
+  console.log("type"+type);
 
   const existingUser = await Model.findOne({ email: userData.email });
 
@@ -79,9 +82,18 @@ const register = async (req, res, Model) => {
     userData.date_naissance = Date.parse(userData.date_naissance);
     const newUser = new Model(userData);
 
+    if(type==="medecin"){
+      const oldAssistant=await Assistant.findOne({ _id:userData.assistant });
+      const service=await Service.findOne({ _id:userData.service });
+      newUser.service=service;
+      newUser.assisstant=oldAssistant;
+    }
+
     // Hasher le mot de passe avant de l'enregistrer dans la base de données
     const salt = await bcrypt.genSalt(10);
     newUser.password = await bcrypt.hash(newUser.password, salt);
+    // set image to binary
+    
 
     await newUser.save();
 
@@ -91,7 +103,7 @@ const register = async (req, res, Model) => {
         id: newUser._id,
         ...getUserInfo(newUser),
       },
-    });
+    });``
   }
 };
 ///Must return all information about user

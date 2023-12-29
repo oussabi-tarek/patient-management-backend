@@ -1,20 +1,26 @@
-const  mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const  FactureSchema = mongoose.Schema({
-    date:{
-        type:Date,
-        required:true
+const FactureSchema = mongoose.Schema({
+  consultation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Consultation",
+  },
+  document: {
+    name: {
+      type: String,
+      required: false,
     },
-    montant:{
-        type:Number,
-        required:true
+    type: {
+      type: String,
+      required: false,
     },
-    consultation:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Consultation',
+    data: {
+      type: Buffer,
+      required: false,
     },
+  },
 });
-    
-const Facture=mongoose.model('Facture',FactureSchema,'facture');
 
-module.exports=Facture;
+const Facture = mongoose.model("Facture", FactureSchema,"facture");
+
+module.exports = Facture;
