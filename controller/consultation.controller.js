@@ -69,10 +69,7 @@ exports.getUnbilledConsultations = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-const Consultation = require("../model/Consultation");
-const multer = require('multer');
-const Rdv = require("../model/Rdv");
-const upload = multer().single('documents');
+
 
 exports.createConsultation=async (req, res) => {
     try {
