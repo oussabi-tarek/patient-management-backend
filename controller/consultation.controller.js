@@ -7,6 +7,13 @@ const Assisstant = require('../model/Assistant');
 const Medecin = require('../model/Medecin');
 const Patient = require('../model/Patient');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const storage = multer.memoryStorage(); // Store files in memory as buffers
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // Adjust the file size limit as needed
+}).array('documents', 5);
 
 exports.getUnbilledConsultations = async (req, res) => {
   try {
