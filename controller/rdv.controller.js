@@ -188,7 +188,7 @@ exports.updateAppointment = async (req, res) => {
       // Extract the user ID from the JWT token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const userId = decoded.id;
-      
+
       // Fetch the existing appointment
       const existingAppointment = await Rdv.findById(appointmentId);
       if (!existingAppointment) {
@@ -334,7 +334,7 @@ exports.getPendingAppointmentsForAssistant = async (req, res) => {
     const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
 
     if (!token) {
-      return res.status(401).json({ error: 'Unauthorized: Token not provided' });
+      return res.status(401).json({ error: 'Unauthorized: Token not provided ' });
     }
 
     // Decode the token to get the assistant ID
