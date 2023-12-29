@@ -15,5 +15,5 @@ const upload = multer({
 module.exports = function (app) {
   app.post("/api/facture", generateFacture);
   app.post("/api/saveFacture", upload.single("document"), saveFacture);
-  app.get("/api/getFacture", getFacture);
+  app.post("/api/getFacture", getFacture);
 };
