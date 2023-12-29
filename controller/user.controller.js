@@ -92,8 +92,8 @@ const register = async (req, res, Model) => {
     // Hasher le mot de passe avant de l'enregistrer dans la base de données
     const salt = await bcrypt.genSalt(10);
     newUser.password = await bcrypt.hash(newUser.password, salt);
-
-    console.log(":"+newUser);
+    // set image to binary
+    
 
     await newUser.save();
 
@@ -103,7 +103,7 @@ const register = async (req, res, Model) => {
         id: newUser._id,
         ...getUserInfo(newUser),
       },
-    });
+    });``
   }
 };
 ///Must return all information about user

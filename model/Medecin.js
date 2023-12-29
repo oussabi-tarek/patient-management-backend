@@ -35,7 +35,7 @@ const MedecinSchema = mongoose.Schema({
         required:true
     },
     image:{
-        type:Buffer,
+        type:String,
         required:true
     },
     service:{
